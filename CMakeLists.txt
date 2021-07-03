@@ -4,6 +4,7 @@ project(MazeDraw)
 
 include(FindPkgConfig)
 PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 
@@ -22,6 +23,7 @@ add_executable(mazeDraw
 )
 
 target_link_libraries(mazeDraw
-   ${SDL2_LIBRARIES}  
+   ${SDL2_LIBRARIES}
+   ${SDL2IMAGE_LIBRARIES}
    m
 )

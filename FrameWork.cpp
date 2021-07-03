@@ -1,6 +1,7 @@
 #include "FrameWork.hpp"
 
 #include <SDL.h>
+#include <SDL_image.h>
 
 FrameWork::FrameWork(int const width, int const height):
     height_(height),
@@ -10,6 +11,7 @@ FrameWork::FrameWork(int const width, int const height):
 {
 
     SDL_Init(SDL_INIT_VIDEO);
+
 
     SDL_CreateWindowAndRenderer(width_,
                                 height_,
@@ -49,6 +51,10 @@ void FrameWork::run( void )
     SDL_Event event;
 
     do {
+        /* Clear the viewing area */
+        SDL_SetRenderDrawColor(renderer_, 0,0,0,255);
+        SDL_RenderClear(renderer_);
+
         drawCircle();
         SDL_Delay(10); /* Just for now ... */
         SDL_PollEvent(&event);

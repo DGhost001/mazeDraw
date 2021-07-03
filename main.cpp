@@ -1,7 +1,12 @@
 #include <iostream>
 
+#include "FrameWork.hpp"
+
 int main( void )
 {
-    std::cout << "Hello World!" << std::endl;
+    FrameWork frameWork(640, 480);
+
+    frameWork.run();
+
     return 0;
 }
