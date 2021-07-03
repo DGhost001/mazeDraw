@@ -20,6 +20,11 @@ FrameWork::FrameWork(int const width, int const height):
                                                 &renderer_
                                                 ));
 
+    /* Load the PNG Support */
+    IMG_CHECK_ERROR(IMG_Init(IMG_INIT_PNG), IMG_INIT_PNG);
+
+
+    /* Initialize the Window with some black color below */
     SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_, 0,0,0,255));
     SDL_CHECK_ERROR(SDL_RenderClear(renderer_));
     SDL_RenderPresent(renderer_);
@@ -29,6 +34,7 @@ FrameWork::~FrameWork()
 {
     SDL_DestroyRenderer(renderer_);
     SDL_DestroyWindow(window_);
+    IMG_Quit();
     SDL_Quit();
 }
 
