@@ -1,5 +1,6 @@
 #include "FrameWork.hpp"
 #include "Exception.hpp"
+#include "Image.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -34,6 +35,11 @@ FrameWork::FrameWork(int const width, int const height):
     SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255));
     SDL_CHECK_ERROR(SDL_RenderClear(renderer_.get()));
     SDL_RenderPresent(renderer_.get());
+
+
+    /* Load the background image */
+
+    image_ = std::make_shared<Image>("assets/grass.png", renderer_);
 }
 
 FrameWork::~FrameWork()
@@ -47,6 +53,12 @@ FrameWork::~FrameWork()
 
 void FrameWork::drawCircle()
 {
+    for(int x = 0; x < width_ / 32; ++x )
+        for(int y = 0; y < height_ / 32; ++y)
+        {
+            image_->render(renderer_, x*32, y*32);
+        }
+
     SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_.get(), 255, 0, 0, 255));
 
     for(unsigned i = 0; i<3600; ++i) {

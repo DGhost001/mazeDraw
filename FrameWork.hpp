@@ -5,6 +5,8 @@
 
 struct SDL_Renderer;
 struct SDL_Window;
+class Image;
+
 
 class FrameWork
 {
@@ -20,6 +22,7 @@ private:
 
     std::shared_ptr<SDL_Renderer> renderer_;
     std::shared_ptr<SDL_Window> window_;
+    std::shared_ptr<Image> image_;
 
     void drawCircle();
 
