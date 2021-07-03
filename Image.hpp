@@ -11,8 +11,10 @@ struct SDL_Renderer;
 class Image
 {
 public:
-    explicit Image(const std::string &path, std::shared_ptr<SDL_Renderer> render);
+    explicit Image(const std::string &path, std::shared_ptr<SDL_Renderer> renderer);
     virtual ~Image();
+    void render(std::shared_ptr<SDL_Renderer> renderer,
+                int const x, int const y, int const w = -1, int const h = -1);
 private:
     std::shared_ptr<SDL_Texture> imageTexture_;
 
