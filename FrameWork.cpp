@@ -11,45 +11,52 @@ FrameWork::FrameWork(int const width, int const height):
     window_(nullptr)
 {
 
-    SDL_CHECK_ERROR(SDL_Init(SDL_INIT_VIDEO));
+    SDL_Renderer *rawRenderer = nullptr;
+    SDL_Window *rawWindow = nullptr;
 
+    /* Initialize SDL and open a window */
+    SDL_CHECK_ERROR(SDL_Init(SDL_INIT_VIDEO));
     SDL_CHECK_ERROR(SDL_CreateWindowAndRenderer(width_,
                                                 height_,
                                                 0,
-                                                &window_,
-                                                &renderer_
+                                                &rawWindow,
+                                                &rawRenderer
                                                 ));
+
+    renderer_ = std::shared_ptr<SDL_Renderer>(rawRenderer, SDL_DestroyRenderer);
+    window_ = std::shared_ptr<SDL_Window>(rawWindow, SDL_DestroyWindow);
 
     /* Load the PNG Support */
     IMG_CHECK_ERROR(IMG_Init(IMG_INIT_PNG), IMG_INIT_PNG);
 
 
     /* Initialize the Window with some black color below */
-    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_, 0,0,0,255));
-    SDL_CHECK_ERROR(SDL_RenderClear(renderer_));
-    SDL_RenderPresent(renderer_);
+    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255));
+    SDL_CHECK_ERROR(SDL_RenderClear(renderer_.get()));
+    SDL_RenderPresent(renderer_.get());
 }
 
 FrameWork::~FrameWork()
 {
-    SDL_DestroyRenderer(renderer_);
-    SDL_DestroyWindow(window_);
+    /* Teardown SDL and Image library */
+    renderer_.reset();
+    window_.reset();
     IMG_Quit();
     SDL_Quit();
 }
 
 void FrameWork::drawCircle()
 {
-    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_, 255, 0, 0, 255));
+    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_.get(), 255, 0, 0, 255));
 
     for(unsigned i = 0; i<3600; ++i) {
-        SDL_RenderDrawPointF(renderer_,
+        SDL_RenderDrawPointF(renderer_.get(),
                              sinf((i /1800.0)*M_PI)*100 + 320,
                              cosf((i /1800.0)*M_PI)*100 + 200);
 
     }
 
-    SDL_RenderPresent(renderer_);
+    SDL_RenderPresent(renderer_.get());
 }
 
 void FrameWork::run( void )
@@ -58,8 +65,8 @@ void FrameWork::run( void )
 
     do {
         /* Clear the viewing area */
-        SDL_SetRenderDrawColor(renderer_, 0,0,0,255);
-        SDL_RenderClear(renderer_);
+        SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255);
+        SDL_RenderClear(renderer_.get());
 
         drawCircle();
         SDL_Delay(10); /* Just for now ... */

@@ -12,11 +12,13 @@ set(SOURCE
     main.cpp
     FrameWork.cpp
     Exception.cpp
+    Image.cpp
 )
 
 set(HEADERS
     FrameWork.hpp
     Exception.hpp
+    Image.hpp
 )
 
 add_executable(mazeDraw
