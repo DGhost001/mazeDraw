@@ -1,4 +1,5 @@
 #include "FrameWork.hpp"
+#include "Exception.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -10,18 +11,17 @@ FrameWork::FrameWork(int const width, int const height):
     window_(nullptr)
 {
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_CHECK_ERROR(SDL_Init(SDL_INIT_VIDEO));
 
+    SDL_CHECK_ERROR(SDL_CreateWindowAndRenderer(width_,
+                                                height_,
+                                                0,
+                                                &window_,
+                                                &renderer_
+                                                ));
 
-    SDL_CreateWindowAndRenderer(width_,
-                                height_,
-                                0,
-                                &window_,
-                                &renderer_
-                                );
-
-    SDL_SetRenderDrawColor(renderer_, 0,0,0,255);
-    SDL_RenderClear(renderer_);
+    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_, 0,0,0,255));
+    SDL_CHECK_ERROR(SDL_RenderClear(renderer_));
     SDL_RenderPresent(renderer_);
 }
 
@@ -34,7 +34,7 @@ FrameWork::~FrameWork()
 
 void FrameWork::drawCircle()
 {
-    SDL_SetRenderDrawColor(renderer_, 255, 0, 0, 255);
+    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_, 255, 0, 0, 255));
 
     for(unsigned i = 0; i<3600; ++i) {
         SDL_RenderDrawPointF(renderer_,

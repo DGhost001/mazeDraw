@@ -11,10 +11,12 @@ include_directories(${SDL2_INCLUDE_DIRS})
 set(SOURCE
     main.cpp
     FrameWork.cpp
+    Exception.cpp
 )
 
 set(HEADERS
     FrameWork.hpp
+    Exception.hpp
 )
 
 add_executable(mazeDraw
