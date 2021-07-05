@@ -53,6 +53,7 @@ public:
 
     /* Sets a cell in the maze */
     void set(size_t const x, size_t const y, MazeContent const cell);
+    MazeContent get( size_t const x, size_t const y) const;
 
 private:
     Matrix<MazeContent, 1000, 1000> maze_;
