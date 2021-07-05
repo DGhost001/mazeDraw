@@ -34,7 +34,7 @@ public:
     Labyrinth();
 
     void load(const std::string &path);
-    void save(const std::string &path);
+    void save(const std::string &path) const;
 
     /**
      * @brief render Renders the Labyrinth
@@ -49,7 +49,7 @@ public:
                 size_t const cy,
                 size_t const w,
                 size_t const h
-                );
+                ) const;
 
     /* Sets a cell in the maze */
     void set(size_t const x, size_t const y, MazeContent const cell);
