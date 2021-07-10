@@ -31,7 +31,7 @@ public:
 
 
 
-    Labyrinth();
+    explicit Labyrinth(std::shared_ptr<SDL_Renderer> renderer);
 
     void load(const std::string &path);
     void save(const std::string &path) const;
@@ -58,6 +58,8 @@ public:
 private:
     Matrix<MazeContent, 1000, 1000> maze_;
     std::array< std::shared_ptr< Image >, static_cast<size_t>(MazeContent::Count)> textures_;
+
+    size_t indexOf(MazeContent const content) const noexcept;
 
 };
 
