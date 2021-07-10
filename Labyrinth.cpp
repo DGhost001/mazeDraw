@@ -125,6 +125,16 @@ void Labyrinth::render(std::shared_ptr<SDL_Renderer> renderer,
             ) const
 {
 
+    for(int y = cy - h / 2; y < cy + h /2; ++y) {
+       for(int x = cx - w / 2; x < cx + h /2; ++x) {
+           if( x  > 0 && y > 0 && y < maze_.size() && x < maze_[y].size()) {
+               textures_[indexOf(maze_[y][x])]->render(
+                           renderer,
+                           (cx - w / 2) * 32,
+                           (cy - h / 2) * 32);
+           }
+       }
+    }
 }
 
 void Labyrinth::set(size_t const x, size_t const y, MazeContent const cell)
