@@ -2,15 +2,21 @@
 #include "Exception.hpp"
 #include "Image.hpp"
 #include "Labyrinth.hpp"
+#include "RepeatDelay.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <iostream>
 
 FrameWork::FrameWork(int const width, int const height):
     height_(height),
     width_(width),
     renderer_(nullptr),
-    window_(nullptr)
+    window_(nullptr),
+    upDelay_(std::chrono::milliseconds(100)),
+    downDelay_(std::chrono::milliseconds(100)),
+    leftDelay_(std::chrono::milliseconds(100)),
+    rightDelay_(std::chrono::milliseconds(100))
 {
 
     SDL_Renderer *rawRenderer = nullptr;
@@ -70,18 +76,34 @@ void FrameWork::drawLabyrinth( void ) const
 
     SDL_RenderPresent(renderer_.get());
 }
+void  FrameWork::handleKeyboard( void )
+{
+    if(keyMap_[SDLK_UP] && posy_ > 0)       upDelay_.   run([this]{--posy_;});
+    if(keyMap_[SDLK_DOWN] && posy_ < 1000)  downDelay_. run([this]{++posy_;});
+    if(keyMap_[SDLK_LEFT] && posx_ > 0)     leftDelay_. run([this]{--posx_;});
+    if(keyMap_[SDLK_RIGHT] && posx_ < 1000) rightDelay_.run([this]{++posx_;});
+}
 
 void FrameWork::run( void )
 {
     SDL_Event event;
+
 
     do {
         /* Clear the viewing area */
         SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255);
         SDL_RenderClear(renderer_.get());
 
+        handleKeyboard();
         drawLabyrinth();
         SDL_Delay(10); /* Just for now ... */
         SDL_PollEvent(&event);
-    }while(SDL_QUIT != event.type);
+
+        if(SDL_KEYDOWN == event.type) {
+            keyMap_[event.key.keysym.sym] = true;
+        } else if(SDL_KEYUP == event.type && !event.key.repeat) {
+            keyMap_[event.key.keysym.sym] = false;
+        }
+
+    }while(SDL_QUIT != event.type && !keyMap_[SDLK_ESCAPE]);
 }
