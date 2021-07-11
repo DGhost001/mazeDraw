@@ -37,23 +37,22 @@ void Labyrinth::load(const std::string &path)
         }
     }
 
-    std::ifstream inFile(path, std::ios::in);
+    std::ifstream inFile(path, std::ios::in | std::ios::binary);
     size_t y = 0;
     size_t x = 0;
 
     while(!inFile.eof() && y < maze_.size()) {
-        char c;
-        inFile >> c;
+        char const c = inFile.get();
 
         switch (c) {
         case '+':
         case '|':
-        case '-': maze_[y][x] = MazeContent::Wall; break;
-        case 'W': maze_[y][x] = MazeContent::Waterbottle; break;
-        case 'S': maze_[y][x] = MazeContent::Start; break;
-        case 'T': maze_[y][x] = MazeContent::Treashure; break;
+        case '-': maze_[y][x] = MazeContent::Wall; ++x; break;
+        case 'W': maze_[y][x] = MazeContent::Waterbottle; ++x; break;
+        case 'S': maze_[y][x] = MazeContent::Start; ++x; break;
+        case 'T': maze_[y][x] = MazeContent::Treasure; ++x; break;
         case '\n': ++y; x = 0; break;
-        default: break;
+        default: ++x; break;
         }
 
         if(y < maze_.size()) {
