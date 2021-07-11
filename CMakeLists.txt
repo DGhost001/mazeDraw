@@ -14,6 +14,7 @@ set(SOURCE
     Exception.cpp
     Image.cpp
     Labyrinth.cpp
+    RepeatDelay.cpp
 )
 
 set(HEADERS
@@ -21,6 +22,7 @@ set(HEADERS
     Exception.hpp
     Image.hpp
     Labyrinth.hpp
+    RepeatDelay.hpp
 )
 
 add_executable(mazeDraw
