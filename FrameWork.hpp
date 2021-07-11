@@ -3,10 +3,12 @@
 
 #include <memory>
 
+#include <cstdlib>
+
 struct SDL_Renderer;
 struct SDL_Window;
 class Image;
-
+class Labyrinth;
 
 class FrameWork
 {
@@ -20,13 +22,15 @@ private:
     int height_;
     int width_;
 
-    std::shared_ptr<SDL_Renderer> renderer_;
-    std::shared_ptr<SDL_Window> window_;
-    std::shared_ptr<Image> image_;
+    size_t posx_; /* This is the x center position of the lab */
+    size_t posy_; /* This is the y center position of the lab */
 
-    void drawCircle();
+    std::shared_ptr<SDL_Renderer> renderer_; /* This is the renderer */
+    std::shared_ptr<SDL_Window> window_; /* The SDL Window */
+    std::shared_ptr<Image> image_; /* The default clearing background */
+    std::shared_ptr<Labyrinth> labyrinth_; /* The labyrinth to draw */
 
-
+    void drawLabyrinth( void ) const;
 };
 
 #endif // FRAMEWORK_HPP

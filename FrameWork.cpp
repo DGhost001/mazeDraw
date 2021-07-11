@@ -1,6 +1,7 @@
 #include "FrameWork.hpp"
 #include "Exception.hpp"
 #include "Image.hpp"
+#include "Labyrinth.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -40,6 +41,8 @@ FrameWork::FrameWork(int const width, int const height):
     /* Load the background image */
 
     image_ = std::make_shared<Image>("assets/grass.png", renderer_);
+    labyrinth_ = std::make_shared<Labyrinth>(renderer_);
+    labyrinth_->load("maze/sample.maze");
 }
 
 FrameWork::~FrameWork()
@@ -51,7 +54,7 @@ FrameWork::~FrameWork()
     SDL_Quit();
 }
 
-void FrameWork::drawCircle()
+void FrameWork::drawLabyrinth( void ) const
 {
     for(int x = 0; x < width_ / 32; ++x )
         for(int y = 0; y < height_ / 32; ++y)
@@ -59,14 +62,8 @@ void FrameWork::drawCircle()
             image_->render(renderer_, x*32, y*32);
         }
 
-    SDL_CHECK_ERROR(SDL_SetRenderDrawColor(renderer_.get(), 255, 0, 0, 255));
+    labyrinth_->render(renderer_, posx_, posy_, width_/32, height_ / 32);
 
-    for(unsigned i = 0; i<3600; ++i) {
-        SDL_RenderDrawPointF(renderer_.get(),
-                             sinf((i /1800.0)*M_PI)*100 + 320,
-                             cosf((i /1800.0)*M_PI)*100 + 200);
-
-    }
 
     SDL_RenderPresent(renderer_.get());
 }
@@ -80,7 +77,7 @@ void FrameWork::run( void )
         SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255);
         SDL_RenderClear(renderer_.get());
 
-        drawCircle();
+        drawLabyrinth();
         SDL_Delay(10); /* Just for now ... */
         SDL_PollEvent(&event);
     }while(SDL_QUIT != event.type);
