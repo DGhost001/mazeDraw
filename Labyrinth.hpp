@@ -25,7 +25,7 @@ public:
         Wall,
         Waterbottle,
         Start,
-        Treashure,
+        Treasure,
         Count /* Keep this at the END! */
     };
 

@@ -22,10 +22,10 @@ Labyrinth::Labyrinth(std::shared_ptr<SDL_Renderer> renderer)
 
     /* Load all required texture for the rendering on construction of the Labyrinth */
     textures_[indexOf(MazeContent::Grass)] = std::make_shared<Image>("assets/grass.png", renderer);
-    textures_[indexOf(MazeContent::Wall)]  = std::make_shared<Image>("assets/wall.pnh", renderer);
+    textures_[indexOf(MazeContent::Wall)]  = std::make_shared<Image>("assets/brick.png", renderer);
     textures_[indexOf(MazeContent::Waterbottle)] = std::make_shared<Image>("assets/bottle.png", renderer);
     textures_[indexOf(MazeContent::Start)] = std::make_shared<Image>("assets/start.png", renderer);
-    textures_[indexOf(MazeContent::Treashure)] = std::make_shared<Image>("assets/treshure.png", renderer);
+    textures_[indexOf(MazeContent::Treasure)] = std::make_shared<Image>("assets/treasure.png", renderer);
 }
 
 void Labyrinth::load(const std::string &path)
@@ -98,7 +98,7 @@ void Labyrinth::save(const std::string &path) const
                 for(;grassRunLength > 0; --grassRunLength) saveFile<< " ";
                 saveFile << "S";
             } break;
-            case MazeContent::Treashure: {
+            case MazeContent::Treasure: {
                 for(;grassRunLength > 0; --grassRunLength) saveFile<< " ";
                 saveFile << "T";
             } break;
