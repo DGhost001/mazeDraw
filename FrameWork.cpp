@@ -40,9 +40,12 @@ FrameWork::FrameWork(int const width, int const height):
 
     /* Load the background image */
 
-    image_ = std::make_shared<Image>("assets/grass.png", renderer_);
+    image_ = std::make_shared<Image>("assets/pebble.png", renderer_);
     labyrinth_ = std::make_shared<Labyrinth>(renderer_);
     labyrinth_->load("maze/sample.maze");
+
+    posx_ = width_ / 64;
+    posy_ = height_ / 64;
 }
 
 FrameWork::~FrameWork()
@@ -62,7 +65,7 @@ void FrameWork::drawLabyrinth( void ) const
             image_->render(renderer_, x*32, y*32);
         }
 
-    labyrinth_->render(renderer_, posx_, posy_, width_/32, height_ / 32);
+    labyrinth_->render(renderer_, posx_, posy_, width_/32, (height_ / 32)-1);
 
 
     SDL_RenderPresent(renderer_.get());
