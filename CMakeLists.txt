@@ -15,6 +15,7 @@ set(SOURCE
     Image.cpp
     Labyrinth.cpp
     RepeatDelay.cpp
+    wallselector.cpp
 )
 
 set(HEADERS
@@ -23,6 +24,7 @@ set(HEADERS
     Image.hpp
     Labyrinth.hpp
     RepeatDelay.hpp
+    wallselector.hpp
 )
 
 add_executable(mazeDraw
