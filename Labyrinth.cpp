@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-size_t Labyrinth::indexOf(MazeContent const content) const noexcept
+size_t Labyrinth::indexOf(MazeContent const content) noexcept
 {
     return static_cast<size_t>(content);
 }

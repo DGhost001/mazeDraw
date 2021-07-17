@@ -55,11 +55,11 @@ public:
     void set(size_t const x, size_t const y, MazeContent const cell);
     MazeContent get( size_t const x, size_t const y) const;
 
+    static size_t indexOf(MazeContent const content) noexcept;
+
 private:
     Matrix<MazeContent, 1000, 1000> maze_;
     std::array< std::shared_ptr< Image >, static_cast<size_t>(MazeContent::Count)> textures_;
-
-    size_t indexOf(MazeContent const content) const noexcept;
 
 };
 
