@@ -90,11 +90,24 @@ void  FrameWork::handleKeyboard( void )
     if((keyMap_[SDLK_DOWN] || keyMap_[SDLK_s]) && posy_ < 1000)  downDelay_. run([this]{++posy_;});
     if((keyMap_[SDLK_LEFT] || keyMap_[SDLK_a]) && posx_ > 0)     leftDelay_. run([this]{--posx_;});
     if((keyMap_[SDLK_RIGHT] || keyMap_[SDLK_d]) && posx_ < 1000) rightDelay_.run([this]{++posx_;});
+    if((keyMap_[SDLK_1])) wallSelector_->cellSelected(0);
+    if((keyMap_[SDLK_2])) wallSelector_->cellSelected(1);
+    if((keyMap_[SDLK_3])) wallSelector_->cellSelected(2);
+    if((keyMap_[SDLK_4])) wallSelector_->cellSelected(3);
+    if((keyMap_[SDLK_5])) wallSelector_->cellSelected(4);
+    if((keyMap_[SDLK_6])) wallSelector_->cellSelected(5);
+    if((keyMap_[SDLK_7])) wallSelector_->cellSelected(6);
+    if((keyMap_[SDLK_8])) wallSelector_->cellSelected(7);
+    if((keyMap_[SDLK_9])) wallSelector_->cellSelected(8);
+    if((keyMap_[SDLK_0])) wallSelector_->cellSelected(9);
 }
 
 void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
 {
-
+    if(cellY == (height_ / cellSize - 1) && mouseButtonMap_[SDL_BUTTON_LEFT])
+    {
+        wallSelector_->cellSelected(cellX);
+    }
 }
 
 void FrameWork::step( void )
@@ -116,7 +129,6 @@ void FrameWork::run( void )
 
         handleKeyboard();
         drawLabyrinth();
-        SDL_Delay(10); /* Just for now ... */
         SDL_PollEvent(&event);
 
         if(SDL_KEYDOWN == event.type) {
@@ -125,8 +137,10 @@ void FrameWork::run( void )
             keyMap_[event.key.keysym.sym] = false;
         } else if(SDL_MOUSEBUTTONDOWN == event.type) {
             mouseButtonMap_[event.button.button] = true;
+            handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
         } else if(SDL_MOUSEBUTTONUP == event.type) {
             mouseButtonMap_[event.button.button] = false;
+            handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
         } else if(SDL_MOUSEMOTION == event.type) {
             handleMouseInput(event.motion.x / cellSize, event.motion.y / cellSize);
         }
