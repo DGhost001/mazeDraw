@@ -78,10 +78,10 @@ void FrameWork::drawLabyrinth( void ) const
 }
 void  FrameWork::handleKeyboard( void )
 {
-    if(keyMap_[SDLK_UP] && posy_ > 0)       upDelay_.   run([this]{--posy_;});
-    if(keyMap_[SDLK_DOWN] && posy_ < 1000)  downDelay_. run([this]{++posy_;});
-    if(keyMap_[SDLK_LEFT] && posx_ > 0)     leftDelay_. run([this]{--posx_;});
-    if(keyMap_[SDLK_RIGHT] && posx_ < 1000) rightDelay_.run([this]{++posx_;});
+    if((keyMap_[SDLK_UP] || keyMap_[SDLK_w]) && posy_ > 0)       upDelay_.   run([this]{--posy_;});
+    if((keyMap_[SDLK_DOWN] || keyMap_[SDLK_s]) && posy_ < 1000)  downDelay_. run([this]{++posy_;});
+    if((keyMap_[SDLK_LEFT] || keyMap_[SDLK_a]) && posx_ > 0)     leftDelay_. run([this]{--posx_;});
+    if((keyMap_[SDLK_RIGHT] || keyMap_[SDLK_d]) && posx_ < 1000) rightDelay_.run([this]{++posx_;});
 }
 
 void FrameWork::run( void )
