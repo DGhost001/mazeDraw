@@ -104,9 +104,19 @@ void  FrameWork::handleKeyboard( void )
 
 void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
 {
+    const size_t topLeftX = posx_ - (width_ / cellSize / 2);
+    const size_t topLeftY = posy_ - (height_ / cellSize / 2);
+
     if(cellY == (height_ / cellSize - 1) && mouseButtonMap_[SDL_BUTTON_LEFT])
     {
         wallSelector_->cellSelected(cellX);
+    }else if (mouseButtonMap_[SDL_BUTTON_LEFT]) {
+
+        labyrinth_->set(topLeftX + cellX, topLeftY + cellY, wallSelector_->getSelectedWall());
+    }else if (mouseButtonMap_[SDL_BUTTON_RIGHT]) {
+        labyrinth_->set(topLeftX + cellX, topLeftY + cellY, Labyrinth::MazeContent::Grass);
+    }else if (mouseButtonMap_[SDL_BUTTON_MIDDLE]) {
+        labyrinth_->set(topLeftX + cellX, topLeftY + cellY, Labyrinth::MazeContent::Waterbottle);
     }
 }
 
