@@ -8,6 +8,9 @@
 #include <SDL_image.h>
 #include <iostream>
 
+static constexpr size_t const& cellSize = 32;
+
+
 FrameWork::FrameWork(int const width, int const height):
     height_(height),
     width_(width),
@@ -50,8 +53,8 @@ FrameWork::FrameWork(int const width, int const height):
     labyrinth_ = std::make_shared<Labyrinth>(renderer_);
     labyrinth_->load("maze/sample.maze");
 
-    posx_ = width_ / 64;
-    posy_ = height_ / 64;
+    posx_ = width_ / (2*cellSize);
+    posy_ = height_ / (2*cellSize);
 }
 
 FrameWork::~FrameWork()
@@ -65,23 +68,29 @@ FrameWork::~FrameWork()
 
 void FrameWork::drawLabyrinth( void ) const
 {
-    for(int x = 0; x < width_ / 32; ++x )
-        for(int y = 0; y < height_ / 32; ++y)
+    for(int x = 0; x < width_ / cellSize; ++x )
+        for(int y = 0; y < height_ / cellSize; ++y)
         {
-            image_->render(renderer_, x*32, y*32);
+            image_->render(renderer_, x*cellSize, y*cellSize);
         }
 
-    labyrinth_->render(renderer_, posx_, posy_, width_/32, (height_ / 32)-1);
+    labyrinth_->render(renderer_, posx_, posy_, width_/cellSize, (height_ / cellSize)-1);
 
 
     SDL_RenderPresent(renderer_.get());
 }
+
 void  FrameWork::handleKeyboard( void )
 {
     if((keyMap_[SDLK_UP] || keyMap_[SDLK_w]) && posy_ > 0)       upDelay_.   run([this]{--posy_;});
     if((keyMap_[SDLK_DOWN] || keyMap_[SDLK_s]) && posy_ < 1000)  downDelay_. run([this]{++posy_;});
     if((keyMap_[SDLK_LEFT] || keyMap_[SDLK_a]) && posx_ > 0)     leftDelay_. run([this]{--posx_;});
     if((keyMap_[SDLK_RIGHT] || keyMap_[SDLK_d]) && posx_ < 1000) rightDelay_.run([this]{++posx_;});
+}
+
+void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
+{
+
 }
 
 void FrameWork::run( void )
@@ -103,6 +112,12 @@ void FrameWork::run( void )
             keyMap_[event.key.keysym.sym] = true;
         } else if(SDL_KEYUP == event.type && !event.key.repeat) {
             keyMap_[event.key.keysym.sym] = false;
+        } else if(SDL_MOUSEBUTTONDOWN == event.type) {
+            mouseButtonMap_[event.button.button] = true;
+        } else if(SDL_MOUSEBUTTONUP == event.type) {
+            mouseButtonMap_[event.button.button] = false;
+        } else if(SDL_MOUSEMOTION == event.type) {
+            handleMouseInput(event.motion.x / cellSize, event.motion.y / cellSize);
         }
 
     }while(SDL_QUIT != event.type && !keyMap_[SDLK_ESCAPE]);

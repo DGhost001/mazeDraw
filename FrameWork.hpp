@@ -29,6 +29,7 @@ private:
     size_t posy_; /* This is the y center position of the lab */
 
     std::map<int, bool> keyMap_;
+    std::map<int, bool> mouseButtonMap_;
 
     std::shared_ptr<SDL_Renderer> renderer_; /* This is the renderer */
     std::shared_ptr<SDL_Window> window_; /* The SDL Window */
@@ -42,6 +43,7 @@ private:
 
     void drawLabyrinth( void ) const;
     void handleKeyboard( void );
+    void handleMouseInput( size_t const cellX, size_t const cellY);
 };
 
 #endif // FRAMEWORK_HPP
