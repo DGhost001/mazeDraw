@@ -31,8 +31,6 @@ public:
     void cellSelected( size_t cell );
 
 private:
-    bool upCount_;
-    uint8_t green_;
     size_t selectedCell_;
     std::array< std::shared_ptr< Image >, static_cast<size_t>(Labyrinth::MazeContent::Count)> textures_;
 
