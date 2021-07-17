@@ -8,11 +8,15 @@
 
 #include <cstdlib>
 
+/* Bunch of forward declarations, so we don't need to include the headers */
+/* This saves us a fair ammount of compile time :) */
 struct SDL_Renderer;
 struct SDL_Window;
 class Image;
 class Labyrinth;
+class WallSelector;
 
+/* The framework class definition */
 class FrameWork
 {
 public:
@@ -35,15 +39,18 @@ private:
     std::shared_ptr<SDL_Window> window_; /* The SDL Window */
     std::shared_ptr<Image> image_; /* The default clearing background */
     std::shared_ptr<Labyrinth> labyrinth_; /* The labyrinth to draw */
+    std::shared_ptr<WallSelector> wallSelector_; /* This is the wall selector at the bottom of the screen */
 
     RepeatDelay upDelay_;
     RepeatDelay downDelay_;
     RepeatDelay leftDelay_;
     RepeatDelay rightDelay_;
+    RepeatDelay stepFunction_;
 
     void drawLabyrinth( void ) const;
     void handleKeyboard( void );
     void handleMouseInput( size_t const cellX, size_t const cellY);
+    void step( void );
 };
 
 #endif // FRAMEWORK_HPP

@@ -3,6 +3,7 @@
 #include "Image.hpp"
 #include "Labyrinth.hpp"
 #include "RepeatDelay.hpp"
+#include "wallselector.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -19,7 +20,8 @@ FrameWork::FrameWork(int const width, int const height):
     upDelay_(std::chrono::milliseconds(100)),
     downDelay_(std::chrono::milliseconds(100)),
     leftDelay_(std::chrono::milliseconds(100)),
-    rightDelay_(std::chrono::milliseconds(100))
+    rightDelay_(std::chrono::milliseconds(100)),
+    stepFunction_(std::chrono::milliseconds(100))
 {
 
     SDL_Renderer *rawRenderer = nullptr;
@@ -53,6 +55,8 @@ FrameWork::FrameWork(int const width, int const height):
     labyrinth_ = std::make_shared<Labyrinth>(renderer_);
     labyrinth_->load("maze/sample.maze");
 
+    wallSelector_ = std::make_shared<WallSelector>(renderer_);
+
     posx_ = width_ / (2*cellSize);
     posy_ = height_ / (2*cellSize);
 }
@@ -75,7 +79,7 @@ void FrameWork::drawLabyrinth( void ) const
         }
 
     labyrinth_->render(renderer_, posx_, posy_, width_/cellSize, (height_ / cellSize)-1);
-
+    wallSelector_->render(renderer_, 0, height_ - cellSize, width_);
 
     SDL_RenderPresent(renderer_.get());
 }
@@ -93,6 +97,10 @@ void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
 
 }
 
+void FrameWork::step( void )
+{
+}
+
 void FrameWork::run( void )
 {
     SDL_Event event;
@@ -102,6 +110,9 @@ void FrameWork::run( void )
         /* Clear the viewing area */
         SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255);
         SDL_RenderClear(renderer_.get());
+
+
+        stepFunction_.run([this]{step();});
 
         handleKeyboard();
         drawLabyrinth();
