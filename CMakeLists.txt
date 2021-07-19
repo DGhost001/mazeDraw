@@ -8,6 +8,8 @@ PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 
+add_subdirectory(third_party)
+
 set(SOURCE
     main.cpp
     FrameWork.cpp
