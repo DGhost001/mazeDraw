@@ -157,11 +157,16 @@ list(APPEND NNGUI_BASIC_SOURCE
 option(NANOGUI_BUILD_EXAMPLE "Build example application" ON)
 if (NANOGUI_BUILD_EXAMPLE)
   # Build example application if desired
-  add_executable(example1 ${NNGUI_EXTRA_SOURCE} ${NNGUI_BASIC_SOURCE} example1.cpp )
+
+  add_library(nanogui ${NNGUI_EXTRA_SOURCE} ${NNGUI_BASIC_SOURCE})
+  target_link_libraries(nanogui ${NNGUI_EXTRA_LIBS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2TTF_LIBRARY})
+
+  add_executable(example1 example1.cpp)
   set_target_properties(
       example1 PROPERTIES
       VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/build/debug")
-  target_link_libraries(example1 ${NNGUI_EXTRA_LIBS} ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2TTF_LIBRARY})
+  target_link_libraries(example1 nanogui ${SDL2_LIBRARY} ${SDL2IMAGE_LIBRARY} ${SDL2TTF_LIBRARY})
+  
 
   # Copy icons for example application
   if (WIN32) 
