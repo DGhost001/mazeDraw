@@ -19,6 +19,7 @@ set(SOURCE
     Labyrinth.cpp
     RepeatDelay.cpp
     wallselector.cpp
+    gui.cpp
 )
 
 set(HEADERS
@@ -28,6 +29,7 @@ set(HEADERS
     Labyrinth.hpp
     RepeatDelay.hpp
     wallselector.hpp
+    gui.hpp
 )
 
 add_executable(mazeDraw
