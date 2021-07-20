@@ -47,10 +47,23 @@ Labyrinth::MazeContent WallSelector::getSelectedWall( void ) const
     return static_cast<Labyrinth::MazeContent>(selectedCell_);
 }
 
+Labyrinth::MazeContent WallSelector::getBgSelectedWall( void ) const
+{
+    return static_cast<Labyrinth::MazeContent>(bgSelectedCell_);
+}
+
 void WallSelector::cellSelected( size_t const cell )
 {
     if(cell < Labyrinth::indexOf(Labyrinth::MazeContent::Count))
     {
         selectedCell_ = cell;
+    }
+}
+
+void WallSelector::bgCellSelected( size_t const cell )
+{
+    if(cell < Labyrinth::indexOf(Labyrinth::MazeContent::Count))
+    {
+        bgSelectedCell_ = cell;
     }
 }

@@ -28,10 +28,18 @@ public:
 
 
     Labyrinth::MazeContent getSelectedWall( void ) const;
+    Labyrinth::MazeContent getBgSelectedWall( void ) const;
+
+    size_t getCellSelected( void ) const { return selectedCell_; }
+    size_t getBgSelectedCell( void ) const { return bgSelectedCell_; }
+
+
     void cellSelected( size_t cell );
+    void bgCellSelected( size_t cell );
 
 private:
     size_t selectedCell_;
+    size_t bgSelectedCell_;
     std::array< std::shared_ptr< Image >, static_cast<size_t>(Labyrinth::MazeContent::Count)> textures_;
 
 
