@@ -11,6 +11,8 @@ namespace sdlgui {
 
 struct SDL_Window;
 
+class WallSelector;
+
 class Gui
 {
 public:
@@ -25,23 +27,19 @@ public:
         FileCallback const loadMaze,
         FileCallback const saveMaze,
         ButtonClickCallback const newMaze,
-        SelectionCallback const foreGround,
-        SelectionCallback const backGround,
-        ButtonClickCallback const quit
+        ButtonClickCallback const quit,
+        std::shared_ptr<WallSelector> wallSelector
         );
 
     std::shared_ptr<sdlgui::Screen> getScreen( void ) const { return screen_; }
 private:
 
     std::shared_ptr<sdlgui::Screen> screen_;
-    std::reference_wrapper<sdlgui::Widget> foreGroundWidget_;
-    std::reference_wrapper<sdlgui::Widget> backGroundWidget_;
+    std::weak_ptr<WallSelector> wallSelector_;
 
     FileCallback loadMaze_;
     FileCallback saveMaze_;
     ButtonClickCallback newMaze_;
-    SelectionCallback foreGround_;
-    SelectionCallback backGround_;
     ButtonClickCallback quit_;
 
 

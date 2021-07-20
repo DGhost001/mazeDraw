@@ -1,4 +1,6 @@
 #include "gui.hpp"
+#include "wallselector.hpp"
+
 
 #include <SDL.h>
 
@@ -12,35 +14,22 @@
 #include <sdlgui/messagedialog.h>
 #include <sdlgui/common.h>
 
-class NullWidget: public sdlgui::Widget
-{
-public:
-    NullWidget():Widget(nullptr) {}
-    virtual ~NullWidget() {}
-};
-
-static NullWidget nullWidget;
-
 Gui::Gui(std::shared_ptr<SDL_Window> window,
          const size_t width,
          const size_t height,
          const FileCallback loadMaze,
          const FileCallback saveMaze,
          const ButtonClickCallback newMaze,
-         const SelectionCallback foreGround,
-         const SelectionCallback backGround,
-         const ButtonClickCallback quit
+         const ButtonClickCallback quit,
+         std::shared_ptr<WallSelector> wallSelector
          ):
     screen_(std::make_shared<sdlgui::Screen>(window.get(),
                                              sdlgui::Vector2i{static_cast<int>(width), static_cast<int>(height)},
                                              "MazeDraw")),
-    foreGroundWidget_(std::ref(nullWidget)),
-    backGroundWidget_(std::ref(nullWidget)),
+    wallSelector_(wallSelector),
     loadMaze_(loadMaze),
     saveMaze_(saveMaze),
     newMaze_(newMaze),
-    foreGround_(foreGround),
-    backGround_(backGround),
     quit_(quit)
 {
     auto& window1 = screen_->window("Tool Window", sdlgui::Vector2i{15,15}).withLayout<sdlgui::GroupLayout>();
@@ -64,6 +53,9 @@ Gui::Gui(std::shared_ptr<SDL_Window> window,
     foreGroundPopup.button("S", [this]{ onSelectForeground(3); }).setFlags(sdlgui::Button::Flags::RadioButton);
     foreGroundPopup.button("T", [this]{ onSelectForeground(4); }).setFlags(sdlgui::Button::Flags::RadioButton);
 
+
+    dynamic_cast<sdlgui::Button*>(foreGroundPopup.children()[wallSelector->getCellSelected()])->setPushed(true);
+
     auto& backGroundMenu  = window1.popupbutton("Background",ENTYPO_ICON_EXPORT);
     auto& backGroundPopup = backGroundMenu.popup().withLayout<sdlgui::GroupLayout>();
 
@@ -81,12 +73,20 @@ Gui::Gui(std::shared_ptr<SDL_Window> window,
 
 void Gui::onSelectForeground(unsigned select)
 {
-    foreGround_(select);
+    std::shared_ptr<WallSelector> wall = wallSelector_.lock();
+
+    if(wall) {
+        wall->cellSelected(select);
+    }
 }
 
 void Gui::onSelectBackground(unsigned select)
 {
-    backGround_(select);
+    std::shared_ptr<WallSelector> wall = wallSelector_.lock();
+
+    if(wall) {
+        wall->bgCellSelected(select);
+    }
 }
 
 void Gui::onNewClicked( void )
