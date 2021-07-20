@@ -109,5 +109,10 @@ void Gui::onOpenClicked( void )
 void Gui::onSaveClicked( void )
 {
     std::string s = sdlgui::file_dialog({ {"maze", "Maze File"}}, true);
+
+    if(!s.ends_with(".maze")) {
+        s += ".maze";
+    }
+
     saveMaze_(s);
 }
