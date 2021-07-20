@@ -29,6 +29,7 @@ public:
 private:
     int height_;
     int width_;
+    bool quit_;
 
     size_t posx_; /* This is the x center position of the lab */
     size_t posy_; /* This is the y center position of the lab */

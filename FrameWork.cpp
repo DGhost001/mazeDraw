@@ -17,6 +17,7 @@ static constexpr size_t const& cellSize = 32;
 FrameWork::FrameWork(int const width, int const height):
     height_(height),
     width_(width),
+    quit_(false),
     renderer_(nullptr),
     window_(nullptr),
     upDelay_(std::chrono::milliseconds(100)),
@@ -73,7 +74,7 @@ FrameWork::FrameWork(int const width, int const height):
                                  [this]{labyrinth_->clear();},
                                  [](unsigned){},
                                  [](unsigned){},
-                                 []{}
+                                 [this]{quit_ = true;}
     );
 
     posx_ = width_ / (2*cellSize);
@@ -180,5 +181,5 @@ void FrameWork::run( void )
             }
         }
 
-    }while(SDL_QUIT != event.type && !keyMap_[SDLK_ESCAPE]);
+    }while(SDL_QUIT != event.type && !keyMap_[SDLK_ESCAPE] && !quit_);
 }
