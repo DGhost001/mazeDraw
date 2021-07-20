@@ -14,11 +14,7 @@ size_t Labyrinth::indexOf(MazeContent const content) noexcept
 Labyrinth::Labyrinth(std::shared_ptr<SDL_Renderer> renderer)
 {
     /* Clear the maze with Grass on initialization of the Labyrith */
-    for(auto& it: maze_) {
-        for(auto &it2: it) {
-            it2 = MazeContent::Grass;
-        }
-    }
+    clear();
 
     /* Load all required texture for the rendering on construction of the Labyrinth */
     textures_[indexOf(MazeContent::Grass)] = std::make_shared<Image>("assets/grass.png", renderer);
@@ -28,7 +24,7 @@ Labyrinth::Labyrinth(std::shared_ptr<SDL_Renderer> renderer)
     textures_[indexOf(MazeContent::Treasure)] = std::make_shared<Image>("assets/treasure.png", renderer);
 }
 
-void Labyrinth::load(const std::string &path)
+void Labyrinth::clear( void )
 {
     /* Clear the maze with Grass before loading anything*/
     for(auto& it: maze_) {
@@ -36,6 +32,12 @@ void Labyrinth::load(const std::string &path)
             it2 = MazeContent::Grass;
         }
     }
+
+}
+
+void Labyrinth::load(const std::string &path)
+{
+    clear();
 
     std::ifstream inFile(path, std::ios::in | std::ios::binary);
     size_t y = 0;
