@@ -72,9 +72,8 @@ FrameWork::FrameWork(int const width, int const height):
                                  [this](const std::string &filename) { labyrinth_->load(filename);},
                                  [this](const std::string &filename) { labyrinth_->save(filename);},
                                  [this]{labyrinth_->clear();},
-                                 [](unsigned){},
-                                 [](unsigned){},
-                                 [this]{quit_ = true;}
+                                 [this]{quit_ = true;},
+                                 wallSelector_
     );
 
     posx_ = width_ / (2*cellSize);
@@ -136,7 +135,7 @@ void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
 
         labyrinth_->set(topLeftX + cellX, topLeftY + cellY, wallSelector_->getSelectedWall());
     }else if (mouseButtonMap_[SDL_BUTTON_RIGHT]) {
-        labyrinth_->set(topLeftX + cellX, topLeftY + cellY, Labyrinth::MazeContent::Grass);
+        labyrinth_->set(topLeftX + cellX, topLeftY + cellY, wallSelector_->getBgSelectedWall());
     }else if (mouseButtonMap_[SDL_BUTTON_MIDDLE]) {
         labyrinth_->set(topLeftX + cellX, topLeftY + cellY, Labyrinth::MazeContent::Waterbottle);
     }
