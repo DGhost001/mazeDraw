@@ -68,9 +68,9 @@ FrameWork::FrameWork(int const width, int const height):
     wallSelector_ = std::make_shared<WallSelector>(renderer_);
 
     gui_ = std::make_shared<Gui>(window_, width_, height_,
-                                 [](const std::string &) {},
-                                 [](const std::string &) {},
-                                 []{},
+                                 [this](const std::string &filename) { labyrinth_->load(filename);},
+                                 [this](const std::string &filename) { labyrinth_->save(filename);},
+                                 [this]{labyrinth_->clear();},
                                  [](unsigned){},
                                  [](unsigned){},
                                  []{}
