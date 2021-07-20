@@ -4,37 +4,15 @@
 #include "Labyrinth.hpp"
 #include "RepeatDelay.hpp"
 #include "wallselector.hpp"
+#include "gui.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 
 #include <sdlgui/screen.h>
-#include <sdlgui/window.h>
-#include <sdlgui/label.h>
-#include <sdlgui/button.h>
 
 static constexpr size_t const& cellSize = 32;
-
-class Example : public sdlgui::Screen
-{
-public:
-    explicit Example(std::shared_ptr<SDL_Window> win, size_t const width, size_t const height)
-        : Screen(win.get(), sdlgui::Vector2i{width, height}, "GUI Test")
-    {
-        sdlgui::Window& win1 = dynamic_cast<sdlgui::Window&> (window("Sample Window", sdlgui::Vector2i{15,15}).withLayout<sdlgui::GroupLayout>());
-        win1.label("Push buttons", "sans-bold")._and()
-               .button("Plain button 1", [&win1] { win1.dispose(); std::cout << "pushed!" << std::endl; })
-                  .withTooltip("This is plain button tips");
-        performLayout(mSDL_Renderer);
-    }
-
-    virtual ~Example() {
-        /* Nothing to see here ... go on please */
-    }
-};
-
-
 
 FrameWork::FrameWork(int const width, int const height):
     height_(height),
@@ -89,7 +67,14 @@ FrameWork::FrameWork(int const width, int const height):
 
     wallSelector_ = std::make_shared<WallSelector>(renderer_);
 
-    example_ = std::make_shared<Example>(window_, width_, height_);
+    gui_ = std::make_shared<Gui>(window_, width_, height_,
+                                 [](const std::string &) {},
+                                 [](const std::string &) {},
+                                 []{},
+                                 [](unsigned){},
+                                 [](unsigned){},
+                                 []{}
+    );
 
     posx_ = width_ / (2*cellSize);
     posy_ = height_ / (2*cellSize);
@@ -115,7 +100,7 @@ void FrameWork::drawLabyrinth( void ) const
     labyrinth_->render(renderer_, posx_, posy_, width_/cellSize, (height_ / cellSize)-1);
     wallSelector_->render(renderer_, 0, height_ - cellSize, width_);
 
-    example_->drawAll();
+    gui_->getScreen()->drawAll();
 
     SDL_RenderPresent(renderer_.get());
 }
@@ -175,21 +160,23 @@ void FrameWork::run( void )
 
         handleKeyboard();
         drawLabyrinth();
-        SDL_PollEvent(&event);
 
-        if(!example_->onEvent(event)) {
-            if(SDL_KEYDOWN == event.type) {
-                keyMap_[event.key.keysym.sym] = true;
-            } else if(SDL_KEYUP == event.type && !event.key.repeat) {
-                keyMap_[event.key.keysym.sym] = false;
-            } else if(SDL_MOUSEBUTTONDOWN == event.type) {
-                mouseButtonMap_[event.button.button] = true;
-                handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
-            } else if(SDL_MOUSEBUTTONUP == event.type) {
-                mouseButtonMap_[event.button.button] = false;
-                handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
-            } else if(SDL_MOUSEMOTION == event.type) {
-                handleMouseInput(event.motion.x / cellSize, event.motion.y / cellSize);
+        while(SDL_PollEvent(&event) && SDL_QUIT != event.type)
+        {
+            if(!gui_->getScreen()->onEvent(event)) {
+                if(SDL_KEYDOWN == event.type) {
+                    keyMap_[event.key.keysym.sym] = true;
+                } else if(SDL_KEYUP == event.type && !event.key.repeat) {
+                    keyMap_[event.key.keysym.sym] = false;
+                } else if(SDL_MOUSEBUTTONDOWN == event.type) {
+                    mouseButtonMap_[event.button.button] = true;
+                    handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
+                } else if(SDL_MOUSEBUTTONUP == event.type) {
+                    mouseButtonMap_[event.button.button] = false;
+                    handleMouseInput(event.button.x / cellSize, event.button.y / cellSize);
+                } else if(SDL_MOUSEMOTION == event.type) {
+                    handleMouseInput(event.motion.x / cellSize, event.motion.y / cellSize);
+                }
             }
         }
 

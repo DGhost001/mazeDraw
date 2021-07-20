@@ -15,7 +15,7 @@ struct SDL_Window;
 class Image;
 class Labyrinth;
 class WallSelector;
-class Example;
+class Gui;
 
 /* The framework class definition */
 class FrameWork
@@ -41,7 +41,7 @@ private:
     std::shared_ptr<Image> image_; /* The default clearing background */
     std::shared_ptr<Labyrinth> labyrinth_; /* The labyrinth to draw */
     std::shared_ptr<WallSelector> wallSelector_; /* This is the wall selector at the bottom of the screen */
-    std::shared_ptr<Example> example_; /* This is just an example GUI window */
+    std::shared_ptr<Gui> gui_; /* This is just an example GUI window */
 
     RepeatDelay upDelay_;
     RepeatDelay downDelay_;
