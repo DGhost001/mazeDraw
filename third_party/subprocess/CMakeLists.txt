@@ -39,5 +39,5 @@ endif()
 add_subdirectory(src/cpp subprocess)
 
 # TODO testing
-enable_testing()
-add_subdirectory(test)
+#enable_testing()
+#add_subdirectory(test)

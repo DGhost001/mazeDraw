@@ -8,6 +8,7 @@ PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/nanogui)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/subprocess/src/cpp)
 
 add_subdirectory(third_party)
 
@@ -39,6 +40,7 @@ add_executable(mazeDraw
 
 target_link_libraries(mazeDraw
    nanogui
+   subprocess
    ${SDL2_LIBRARIES}
    ${SDL2IMAGE_LIBRARIES}
    m
