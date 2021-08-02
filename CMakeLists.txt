@@ -21,6 +21,7 @@ set(SOURCE
     RepeatDelay.cpp
     wallselector.cpp
     gui.cpp
+    mazerunner.cpp
 )
 
 set(HEADERS
@@ -31,6 +32,7 @@ set(HEADERS
     RepeatDelay.hpp
     wallselector.hpp
     gui.hpp
+    mazerunner.hpp
 )
 
 add_executable(mazeDraw
