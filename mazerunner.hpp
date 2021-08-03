@@ -37,16 +37,19 @@ public:
     size_t getNumberOfSteps( void ) const {return steps_.size(); }
 
 private:
-    unsigned points_;
+    int points_;
 
     size_t cx_;
     size_t cy_;
+    std::chrono::time_point lastRead_;
 
     bool failed_;
     bool finished_;
     bool collectedTreshure_;
     bool isEof_;
     std::shared_ptr<subprocess::Popen> process_;
+    std::shared_ptr<Labyrinth> lab_;
+
     std::vector<RunnerStep> steps_;
 
     std::array<char, 1024> buffer_;
