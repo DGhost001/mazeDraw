@@ -70,11 +70,11 @@ void MazeRunner::parseNextStep( const std::string& line)
             case Labyrinth::MazeContent::Treasure:
                 collectedTreshure_ = true;
                 points_ += 100;
-                lab_->set(cx,cy,Labyrinth::MazeContent::Grass);
+                lab_->set(cx_,cy_,Labyrinth::MazeContent::Grass);
                 break;
             case Labyrinth::MazeContent::Waterbottle:
                 points_ += 25;
-                lab_->set(cx,cy,Labyrinth::MazeContent::Grass);
+                lab_->set(cx_,cy_,Labyrinth::MazeContent::Grass);
                 break;
             case Labyrinth::MazeContent::Start: finished_ = collectedTreshure_; break;
             default:
@@ -106,9 +106,8 @@ std::string MazeRunner::readLine()
                 isEof_ = true;
             }
         } else {
-            unsigned bufferReadPointer_ = 0;
-
-            for(;i < bytesInBuffer_ && buffer_[i] != '\n'; ++i) {}
+            unsigned i;
+            for(i = bufferReadPointer_;i < bytesInBuffer_ && buffer_[i] != '\n'; ++i) {}
 
             result.append(buffer_.cbegin()+bufferReadPointer_, buffer_.cbegin()+i+1);
             bufferReadPointer_ = i+1;

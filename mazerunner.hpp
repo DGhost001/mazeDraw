@@ -41,7 +41,7 @@ private:
 
     size_t cx_;
     size_t cy_;
-    std::chrono::time_point lastRead_;
+    std::chrono::steady_clock::time_point lastRead_;
 
     bool failed_;
     bool finished_;
