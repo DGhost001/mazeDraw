@@ -21,7 +21,8 @@ Gui::Gui(std::shared_ptr<SDL_Window> window,
          const FileCallback saveMaze,
          const ButtonClickCallback newMaze,
          const ButtonClickCallback quit,
-         std::shared_ptr<WallSelector> wallSelector
+         std::shared_ptr<WallSelector> wallSelector,
+         const FileCallback runner
          ):
     screen_(std::make_shared<sdlgui::Screen>(window.get(),
                                              sdlgui::Vector2i{static_cast<int>(width), static_cast<int>(height)},
@@ -30,7 +31,8 @@ Gui::Gui(std::shared_ptr<SDL_Window> window,
     loadMaze_(loadMaze),
     saveMaze_(saveMaze),
     newMaze_(newMaze),
-    quit_(quit)
+    quit_(quit),
+    runner_(runner)
 {
     auto& window1 = screen_->window("Tool Window", sdlgui::Vector2i{15,15}).withLayout<sdlgui::GroupLayout>();
 
@@ -64,6 +66,10 @@ Gui::Gui(std::shared_ptr<SDL_Window> window,
     backGroundPopup.button("W", [this]{ onSelectBackground(2); }).setFlags(sdlgui::Button::Flags::RadioButton);
     backGroundPopup.button("S", [this]{ onSelectBackground(3); }).setFlags(sdlgui::Button::Flags::RadioButton);
     backGroundPopup.button("T", [this]{ onSelectBackground(4); }).setFlags(sdlgui::Button::Flags::RadioButton);
+
+    auto& runnerMenu = window1.popupbutton("Runner",ENTYPO_ICON_EXPORT);
+    auto& runnerMenuPopUp = runnerMenu.popup().withLayout<sdlgui::GroupLayout>();
+    runnerMenuPopUp.button("Load Runner", ENTYPO_ICON_UPLOAD, [this]{ onRunnerOpenClicked(); });
 
     window1.button("Exit", ENTYPO_ICON_LOGOUT, quit_);
 
@@ -115,4 +121,11 @@ void Gui::onSaveClicked( void )
     }
 
     saveMaze_(s);
+}
+
+void Gui::onRunnerOpenClicked( void )
+{
+    std::string s = sdlgui::file_dialog({ {"exe", "Excecutable"}}, false);
+
+    runner_(s);
 }

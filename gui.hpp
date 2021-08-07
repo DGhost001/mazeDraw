@@ -28,7 +28,8 @@ public:
         FileCallback const saveMaze,
         ButtonClickCallback const newMaze,
         ButtonClickCallback const quit,
-        std::shared_ptr<WallSelector> wallSelector
+        std::shared_ptr<WallSelector> wallSelector,
+        const FileCallback runner
         );
 
     std::shared_ptr<sdlgui::Screen> getScreen( void ) const { return screen_; }
@@ -41,6 +42,7 @@ private:
     FileCallback saveMaze_;
     ButtonClickCallback newMaze_;
     ButtonClickCallback quit_;
+    FileCallback runner_;
 
 
 
@@ -49,6 +51,7 @@ private:
     void onNewClicked( void );
     void onOpenClicked( void );
     void onSaveClicked( void );
+    void onRunnerOpenClicked( void );
 
 };
 
