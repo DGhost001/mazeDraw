@@ -5,12 +5,14 @@
 #include "RepeatDelay.hpp"
 #include "wallselector.hpp"
 #include "gui.hpp"
+#include "mazerunner.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
 
 #include <sdlgui/screen.h>
+#include <sdlgui/messagedialog.h>
 
 static constexpr size_t const& cellSize = 32;
 
@@ -73,7 +75,8 @@ FrameWork::FrameWork(int const width, int const height):
                                  [this](const std::string &filename) { labyrinth_->save(filename);},
                                  [this]{labyrinth_->clear();},
                                  [this]{quit_ = true;},
-                                 wallSelector_
+                                 wallSelector_,
+                                 [this](const std::string &filename){executeRunner(filename);}
     );
 
     posx_ = width_ / (2*cellSize);
@@ -144,6 +147,25 @@ void FrameWork::handleMouseInput(const size_t cellX, const size_t cellY)
 void FrameWork::step( void )
 {
 }
+
+void FrameWork::executeRunner( const std::string& executable)
+{
+    try {
+        MazeRunner mrun(executable, labyrinth_);
+        steps_ = mrun.run();
+    }catch(std::exception const &e)
+    {
+        gui_->getScreen()->msgdialog(sdlgui::MessageDialog::Type::Information,
+                              "Error during runner execution",
+                              e.what());
+    }catch(...)
+    {
+        gui_->getScreen()->msgdialog(sdlgui::MessageDialog::Type::Information,
+                              "Error during runner execution",
+                              "Execution failure");
+    }
+}
+
 
 void FrameWork::run( void )
 {

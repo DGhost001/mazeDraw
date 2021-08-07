@@ -2,6 +2,7 @@
 #define FRAMEWORK_HPP
 
 #include "RepeatDelay.hpp"
+#include "mazerunner.hpp"
 
 #include <memory>
 #include <map>
@@ -50,10 +51,14 @@ private:
     RepeatDelay rightDelay_;
     RepeatDelay stepFunction_;
 
+    MazeRunner::RunnerStepList steps_;
+
     void drawLabyrinth( void ) const;
     void handleKeyboard( void );
     void handleMouseInput( size_t const cellX, size_t const cellY);
     void step( void );
+
+    void executeRunner( const std::string& executable);
 };
 
 #endif // FRAMEWORK_HPP
