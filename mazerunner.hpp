@@ -23,7 +23,7 @@ public:
         std::chrono::milliseconds timeStamp; /* When the maze runner reached this point */
         size_t x;                             /* The x coordinate in the maze */
         size_t y;                             /* The y coordinate in the maze */
-        unsigned points;
+        int points;
     };
 
     typedef std::vector<RunnerStep> RunnerStepList;
@@ -31,6 +31,9 @@ public:
 
     explicit MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth> labyrinth);
     virtual ~MazeRunner( void );
+
+
+    RunnerStepList run();
 
     unsigned getPoints( void ) const { return points_;} /* Get the number of points */
     bool wasSuccessful( void ) const { return !failed_; } /* Runner was successfull */
@@ -46,6 +49,7 @@ private:
     size_t cy_;
     std::chrono::steady_clock::time_point lastRead_;
     std::string const tmpFileName_;
+    std::string const executable_;
 
     bool failed_;
     bool finished_;
@@ -62,6 +66,7 @@ private:
 
     void parseNextStep( const std::string& line);
     std::string readLine();
+    void findStartPoint( void );
 };
 
 #endif // MAZERUNNER_HPP

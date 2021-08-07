@@ -1,6 +1,8 @@
 #include "mazerunner.hpp"
 #include "Labyrinth.hpp"
 
+#include "Exception.hpp"
+
 #include <subprocess.hpp>
 
 static std::string trim(const std::string& str,
@@ -23,6 +25,7 @@ MazeRunner::MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth>
     cy_(0),
     lastRead_(std::chrono::steady_clock::now()),
     tmpFileName_("/tmp/runMaze.maze"),
+    executable_(executable),
     failed_(false),
     finished_(false),
     collectedTreshure_(false),
@@ -33,19 +36,55 @@ MazeRunner::MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth>
 {
     /* Save the loaded lab to the file, so it can be used by the runner */
     lab_->save(tmpFileName_);
-
-
-    /* Create the process and make it running */
-    process_ = std::make_shared<subprocess::Popen>(
-                subprocess::RunBuilder({executable, tmpFileName_})
-                .cin(subprocess::PipeOption::pipe)
-                .popen());
+    findStartPoint();
 }
 
 MazeRunner::~MazeRunner( void )
 {
     /* Restore the lab from the saved file */
+
+    if(process_) {
+        process_.reset();
+    }
+
     lab_->load(tmpFileName_);
+}
+
+
+MazeRunner::RunnerStepList MazeRunner::run()
+{
+    auto start = std::chrono::steady_clock::now();
+    /* Create the process and make it running */
+    process_ = std::make_shared<subprocess::Popen>(
+                subprocess::RunBuilder({executable_, tmpFileName_})
+                .cin(subprocess::PipeOption::pipe)
+                .popen());
+
+
+    RunnerStep const initial = {
+        .timeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start),
+        .x = cx_,
+        .y = cy_,
+        .points = points_
+    };
+
+    steps_.push_back(initial);
+
+    while(!isEof_ && !finished_) {
+        std::string line = readLine();
+        parseNextStep(line);
+
+        RunnerStep const step = {
+            .timeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start),
+            .x = cx_,
+            .y = cy_,
+            .points = points_
+        };
+
+        steps_.push_back(step);
+    }
+
+    return steps_;
 }
 
 void MazeRunner::parseNextStep( const std::string& line)
@@ -137,4 +176,21 @@ std::string MazeRunner::readLine()
     } while (!result.ends_with('\n') && !isEof_);
 
     return result;
+}
+
+void MazeRunner::findStartPoint()
+{
+    for(size_t x = 0; x < 1000; ++x)
+        for(size_t y = 0; y < 1000; ++y) {
+            if(lab_->get(x,y) == Labyrinth::MazeContent::Start)
+            {
+                cx_ = x;
+                cy_ = y;
+
+                /* break here */
+                return;
+            }
+        }
+
+    throw std::out_of_range("No start point in labyrinth!");
 }
