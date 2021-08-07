@@ -17,21 +17,35 @@ static std::string trim(const std::string& str,
 }
 
 
-MazeRunner::MazeRunner(const std::string &executable):
-    lastRead_(std::chrono::steady_clock::now())
+MazeRunner::MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth> labyrinth):
+    points_(100),
+    cx_(0),
+    cy_(0),
+    lastRead_(std::chrono::steady_clock::now()),
+    tmpFileName_("/tmp/runMaze.maze"),
+    failed_(false),
+    finished_(false),
+    collectedTreshure_(false),
+    isEof_(false),
+    lab_(labyrinth),
+    bytesInBuffer_(0),
+    bufferReadPointer_(0)
 {
-    std::string tmpFile = "/tmp/runMaze.maze";
+    /* Save the loaded lab to the file, so it can be used by the runner */
+    lab_->save(tmpFileName_);
+
 
     /* Create the process and make it running */
     process_ = std::make_shared<subprocess::Popen>(
-                subprocess::RunBuilder({executable, tmpFile})
+                subprocess::RunBuilder({executable, tmpFileName_})
                 .cin(subprocess::PipeOption::pipe)
                 .popen());
 }
 
 MazeRunner::~MazeRunner( void )
 {
-
+    /* Restore the lab from the saved file */
+    lab_->load(tmpFileName_);
 }
 
 void MazeRunner::parseNextStep( const std::string& line)

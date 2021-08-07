@@ -26,7 +26,10 @@ public:
         unsigned points;
     };
 
-    explicit MazeRunner(const std::string &executable);
+    typedef std::vector<RunnerStep> RunnerStepList;
+
+
+    explicit MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth> labyrinth);
     virtual ~MazeRunner( void );
 
     unsigned getPoints( void ) const { return points_;} /* Get the number of points */
@@ -42,6 +45,7 @@ private:
     size_t cx_;
     size_t cy_;
     std::chrono::steady_clock::time_point lastRead_;
+    std::string const tmpFileName_;
 
     bool failed_;
     bool finished_;
@@ -50,7 +54,7 @@ private:
     std::shared_ptr<subprocess::Popen> process_;
     std::shared_ptr<Labyrinth> lab_;
 
-    std::vector<RunnerStep> steps_;
+    RunnerStepList steps_;
 
     std::array<char, 1024> buffer_;
     ssize_t bytesInBuffer_;
