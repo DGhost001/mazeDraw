@@ -22,6 +22,7 @@ set(SOURCE
     wallselector.cpp
     gui.cpp
     mazerunner.cpp
+    RunnerSteps.cpp
 )
 
 set(HEADERS
@@ -33,6 +34,7 @@ set(HEADERS
     wallselector.hpp
     gui.hpp
     mazerunner.hpp
+    RunnerSteps.hpp
 )
 
 add_executable(mazeDraw
