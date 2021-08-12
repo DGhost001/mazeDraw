@@ -6,6 +6,7 @@
 #include "wallselector.hpp"
 #include "gui.hpp"
 #include "mazerunner.hpp"
+#include "RunnerSteps.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -79,6 +80,8 @@ FrameWork::FrameWork(int const width, int const height):
                                  [this](const std::string &filename){executeRunner(filename);}
     );
 
+    runnerSteps_ = std::make_shared<RunnerSteps>();
+
     posx_ = width_ / (2*cellSize);
     posy_ = height_ / (2*cellSize);
 }
@@ -104,6 +107,7 @@ void FrameWork::drawLabyrinth( void ) const
     wallSelector_->render(renderer_, 0, height_ - cellSize, width_);
 
     gui_->getScreen()->drawAll();
+    runnerSteps_->drawSteps(renderer_,posx_, posy_,width_/cellSize, (height_ / cellSize)-1);
 
     SDL_RenderPresent(renderer_.get());
 }

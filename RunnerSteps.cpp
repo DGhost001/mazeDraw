@@ -29,8 +29,8 @@ void RunnerSteps::drawSteps( std::shared_ptr<SDL_Renderer> renderer,
         size_t sy = std::numeric_limits<size_t>::max();
 
         for(auto it = segment.first; it != segment.second; ++it){
-            size_t const ex = (it->x - x1) * 32;
-            size_t const ey = (it->y - y1) * 32;
+            size_t const ex = (it->x - x1) * 32+16-4;
+            size_t const ey = (it->y - y1) * 32+16-4;
 
             if(sx != std::numeric_limits<size_t>::max() &&
                sy != std::numeric_limits<size_t>::max()) {

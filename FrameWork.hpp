@@ -17,6 +17,7 @@ class Image;
 class Labyrinth;
 class WallSelector;
 class Gui;
+class RunnerSteps;
 
 /* The framework class definition */
 class FrameWork
@@ -44,6 +45,7 @@ private:
     std::shared_ptr<Labyrinth> labyrinth_; /* The labyrinth to draw */
     std::shared_ptr<WallSelector> wallSelector_; /* This is the wall selector at the bottom of the screen */
     std::shared_ptr<Gui> gui_; /* This is just an example GUI window */
+    std::shared_ptr<RunnerSteps> runnerSteps_; /* This is the renderer for the runner steps */
 
     RepeatDelay upDelay_;
     RepeatDelay downDelay_;
