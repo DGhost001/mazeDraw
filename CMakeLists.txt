@@ -45,6 +45,8 @@ add_executable(mazeDraw
  ${HEADERS}
 )
 
+message(STATUS "FOUND SDL2 GFX Library: ${SDLGFX_LIBRARY}")
+
 target_link_libraries(mazeDraw
    nanogui
    subprocess
