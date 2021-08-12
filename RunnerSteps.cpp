@@ -1,5 +1,8 @@
 #include "RunnerSteps.hpp"
 
+#include <SDL.h>
+#include <SDL2_gfxPrimitives.h>
+
 RunnerSteps::RunnerSteps( void )
 {
 
@@ -20,7 +23,24 @@ void RunnerSteps::drawSteps( std::shared_ptr<SDL_Renderer> renderer,
 
     SegmentList const segments(computeDrawSegments(x1,y1,x2,y2));
 
+    for(const auto&segment : segments)
+    {
+        size_t sx = std::numeric_limits<size_t>::max();
+        size_t sy = std::numeric_limits<size_t>::max();
 
+        for(auto it = segment.first; it != segment.second; ++it){
+            size_t const ex = (it->x - x1) * 32;
+            size_t const ey = (it->y - y1) * 32;
+
+            if(sx != std::numeric_limits<size_t>::max() &&
+               sy != std::numeric_limits<size_t>::max()) {
+                thickLineRGBA(renderer.get(),sx,sy,ex,ey,8,255,255,0,64);
+            }
+
+            sx = ex;
+            sy = ey;
+        }
+    }
 }
 
 RunnerSteps::SegmentList RunnerSteps::computeDrawSegments(size_t const x1,
