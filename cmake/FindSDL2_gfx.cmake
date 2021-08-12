@@ -14,26 +14,25 @@
 # On OSX, this will prefer the Framework version (if found) over others.
 # People will have to manually change the cache values of 
 # SDLGFX_LIBRARY to override this selection.
-FIND_PATH(SDLGFX_INCLUDE_DIR SDL_gfxPrimitives.h
-  $ENV{SDLGFXDIR}/include
-  $ENV{SDLDIR}/include
-  ~/Library/Frameworks/SDL_gfx.framework/Headers
-  /Library/Frameworks/SDL_gfx.framework/Headers
-  /usr/local/include/SDL
+FIND_PATH(SDLGFX_INCLUDE_DIR SDL2_gfxPrimitives.h
+  $ENV{SDL2GFXDIR}/include
+  $ENV{SDL2DIR}/include
+  ~/Library/Frameworks/SDL2_gfx.framework/Headers
+  /Library/Frameworks/SDL2_gfx.framework/Headers
+  /usr/local/include/SDL2
   /usr/include/SDL
   /usr/local/include/SDL12
   /usr/local/include/SDL11 # FreeBSD ports
-  /usr/include/SDL12
-  /usr/include/SDL11
+  /usr/include/SDL2
   /usr/local/include
   /usr/include
-  /sw/include/SDL # Fink
+  /sw/include/SDL2 # Fink
   /sw/include
-  /opt/local/include/SDL # DarwinPorts
+  /opt/local/include/SDL2 # DarwinPorts
   /opt/local/include
-  /opt/csw/include/SDL # Blastwave
+  /opt/csw/include/SDL2 # Blastwave
   /opt/csw/include 
-  /opt/include/SDL
+  /opt/include/SDL2
   /opt/include
   )
 # I'm not sure if I should do a special casing for Apple. It is 
@@ -47,12 +46,12 @@ IF(${SDLGFX_INCLUDE_DIR} MATCHES ".framework")
       OR "${SDLGFX_FRAMEWORK_PATH_TEMP}" STREQUAL "/System/Library/Frameworks"
       )
     # String is in default search path, don't need to use -F
-    SET(SDLGFX_LIBRARY "-framework SDL_gfx" CACHE STRING "SDL_gfx framework for OSX")
+    SET(SDLGFX_LIBRARY "-framework SDL2_gfx" CACHE STRING "SDL2_gfx framework for OSX")
   ELSE("${SDLGFX_FRAMEWORK_PATH_TEMP}" STREQUAL "/Library/Frameworks"
       OR "${SDLGFX_FRAMEWORK_PATH_TEMP}" STREQUAL "/System/Library/Frameworks"
       )
     # String is not /Library/Frameworks, need to use -F
-    SET(SDLGFX_LIBRARY "-F${SDLGFX_FRAMEWORK_PATH_TEMP} -framework SDL_gfx" CACHE STRING "SDL_gfx framework for OSX")
+    SET(SDLGFX_LIBRARY "-F${SDLGFX_FRAMEWORK_PATH_TEMP} -framework SDL2_gfx" CACHE STRING "SDL2_gfx framework for OSX")
   ENDIF("${SDLGFX_FRAMEWORK_PATH_TEMP}" STREQUAL "/Library/Frameworks"
     OR "${SDLGFX_FRAMEWORK_PATH_TEMP}" STREQUAL "/System/Library/Frameworks"
     )
@@ -61,10 +60,10 @@ IF(${SDLGFX_INCLUDE_DIR} MATCHES ".framework")
 
 ELSE(${SDLGFX_INCLUDE_DIR} MATCHES ".framework")
   FIND_LIBRARY(SDLGFX_LIBRARY 
-    NAMES SDL_gfx
+    NAMES SDL2_gfx
     PATHS
-    $ENV{SDLGFXDIR}/lib
-    $ENV{SDLDIR}/lib
+    $ENV{SDL2GFXDIR}/lib
+    $ENV{SDL2DIR}/lib
     /usr/local/lib
     /usr/lib
     /sw/lib
