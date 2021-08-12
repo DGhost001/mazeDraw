@@ -21,7 +21,11 @@ void RunnerSteps::drawSteps( std::shared_ptr<SDL_Renderer> renderer,
     size_t const y1 = cy > height / 2 ? cy - height / 2 : 0;
     size_t const y2 = cy + height / 2;
 
-    SegmentList const segments(computeDrawSegments(x1,y1,x2,y2));
+    size_t const ox = cx > width /2 ? 0: width/2 - cx;
+    size_t const oy = cy > height /2 ? 0: height/2 - cy;
+
+
+    SegmentList const segments(computeDrawSegments(x1,y1,x2,y2-1));
 
     for(const auto&segment : segments)
     {
@@ -29,12 +33,24 @@ void RunnerSteps::drawSteps( std::shared_ptr<SDL_Renderer> renderer,
         size_t sy = std::numeric_limits<size_t>::max();
 
         for(auto it = segment.first; it != segment.second; ++it){
-            size_t const ex = (it->x - x1) * 32+16-4;
-            size_t const ey = (it->y - y1) * 32+16-4;
+            size_t const ex = (it->x - x1) * 32+16-4+ox*32;
+            size_t const ey = (it->y - y1) * 32+16-4+oy*32;
 
             if(sx != std::numeric_limits<size_t>::max() &&
                sy != std::numeric_limits<size_t>::max()) {
                 thickLineRGBA(renderer.get(),sx,sy,ex,ey,8,255,255,0,64);
+
+                if(sy < ey){
+                    filledTrigonRGBA(renderer.get(),sx-4, sy, sx, sy+4, sx+4, sy, 255,128,0,255);
+                }else if(sy > ey) {
+                    filledTrigonRGBA(renderer.get(),sx-4, sy, sx, sy-4, sx+4, sy, 255,128,0,255);
+                } else if( sx < ex) {
+                    filledTrigonRGBA(renderer.get(),sx, sy-4, sx+4, sy, sx, sy+4, 255,128,0,255);
+                } else {
+                    filledTrigonRGBA(renderer.get(),sx, sy-4, sx-4, sy, sx, sy+4, 255,128,0,255);
+                }
+
+
             }
 
             sx = ex;
