@@ -153,6 +153,25 @@ void FrameWork::executeRunner( const std::string& executable)
     try {
         MazeRunner mrun(executable, labyrinth_);
         steps_ = mrun.run();
+
+        char buffer[33];
+
+        std::string result =  "Points: " + std::string(SDL_itoa(steps_[steps_.size() - 1].points, buffer, 10)) + "\n";
+                    result += "Steps: " + std::string(SDL_itoa(steps_.size(), buffer, 10)) + "\n";
+                    result += "Time: " + std::string(SDL_itoa(steps_[steps_.size() - 1].timeStamp.count(), buffer, 10)) + "\n";
+
+                    if(mrun.wasSuccessful()) {
+                        result = "Runner finished succesfully!\n" + result;
+                    } else {
+                        result = "Runner finished failed!\n" + result;
+                    }
+
+        gui_->getScreen()->msgdialog(sdlgui::MessageDialog::Type::Information,
+                              "Runner Finished",
+                              result.c_str());
+
+
+
     }catch(std::exception const &e)
     {
         gui_->getScreen()->msgdialog(sdlgui::MessageDialog::Type::Information,
