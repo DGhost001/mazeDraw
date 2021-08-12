@@ -4,6 +4,7 @@
 #include "Exception.hpp"
 
 #include <subprocess.hpp>
+#include <iostream>
 
 static std::string trim(const std::string& str,
                         const std::string& whitespace = " \t\r\n")
@@ -57,7 +58,7 @@ MazeRunner::RunnerStepList MazeRunner::run()
     /* Create the process and make it running */
     process_ = std::make_shared<subprocess::Popen>(
                 subprocess::RunBuilder({executable_, tmpFileName_})
-                .cin(subprocess::PipeOption::pipe)
+                .cout(subprocess::PipeOption::pipe)
                 .popen());
 
 
@@ -70,7 +71,7 @@ MazeRunner::RunnerStepList MazeRunner::run()
 
     steps_.push_back(initial);
 
-    while(!isEof_ && !finished_) {
+    while(!isEof_ && !finished_ && !failed_) {
         std::string line = readLine();
         parseNextStep(line);
 
@@ -82,6 +83,8 @@ MazeRunner::RunnerStepList MazeRunner::run()
         };
 
         steps_.push_back(step);
+
+        //std::cout<<"x: "<<cx_<<"\ty: "<<cy_<<"\tPoints:"<<points_<<std::endl;
     }
 
     return steps_;
@@ -134,7 +137,7 @@ void MazeRunner::parseNextStep( const std::string& line)
                 break;
             }
 
-            failed_ = points_ > 0;
+            failed_ = points_ <= 0;
         }
     }
 }
@@ -165,14 +168,14 @@ std::string MazeRunner::readLine()
             result.append(buffer_.cbegin()+bufferReadPointer_, buffer_.cbegin()+i+1);
             bufferReadPointer_ = i+1;
         }
-
+#if 0
         if(std::chrono::steady_clock::now() - lastRead_ > std::chrono::seconds(15)) {
             failed_ = true;
             finished_ = false;
             collectedTreshure_ = false;
             isEof_ = true;
         }
-
+#endif
     } while (!result.ends_with('\n') && !isEof_);
 
     return result;
