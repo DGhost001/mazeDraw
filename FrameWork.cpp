@@ -72,12 +72,21 @@ FrameWork::FrameWork(int const width, int const height):
     wallSelector_ = std::make_shared<WallSelector>(renderer_);
 
     gui_ = std::make_shared<Gui>(window_, width_, height_,
-                                 [this](const std::string &filename) { labyrinth_->load(filename);},
-                                 [this](const std::string &filename) { labyrinth_->save(filename);},
-                                 [this]{labyrinth_->clear();},
-                                 [this]{quit_ = true;},
-                                 wallSelector_,
-                                 [this](const std::string &filename){executeRunner(filename);}
+                                 [this](const std::string &filename)
+    {
+        steps_.clear();
+        runnerSteps_->setSteps(steps_);
+        labyrinth_->load(filename);
+    },
+    [this](const std::string &filename) { labyrinth_->save(filename);},
+    [this]{
+        steps_.clear();
+        runnerSteps_->setSteps(steps_);
+        labyrinth_->clear();
+    },
+    [this]{quit_ = true;},
+    wallSelector_,
+    [this](const std::string &filename){executeRunner(filename);}
     );
 
     runnerSteps_ = std::make_shared<RunnerSteps>();
@@ -105,9 +114,9 @@ void FrameWork::drawLabyrinth( void ) const
 
     labyrinth_->render(renderer_, posx_, posy_, width_/cellSize, (height_ / cellSize)-1);
     wallSelector_->render(renderer_, 0, height_ - cellSize, width_);
+    runnerSteps_->drawSteps(renderer_,posx_, posy_,width_/cellSize, (height_ / cellSize)-1);
 
     gui_->getScreen()->drawAll();
-    runnerSteps_->drawSteps(renderer_,posx_, posy_,width_/cellSize, (height_ / cellSize)-1);
 
     SDL_RenderPresent(renderer_.get());
 }
