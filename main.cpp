@@ -7,7 +7,7 @@ int main( void )
 {
     try
     {
-        FrameWork frameWork(800, 608);
+        FrameWork frameWork(1024, 800);
 
         frameWork.run();
     }catch(const std::exception &e)
