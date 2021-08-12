@@ -17,7 +17,7 @@ public:
         std::chrono::milliseconds timeStamp; /* When the maze runner reached this point */
         size_t x;                             /* The x coordinate in the maze */
         size_t y;                             /* The y coordinate in the maze */
-        unsigned points;
+        int points;
     };
 
     typedef std::vector<Steps> StepList;
