@@ -112,6 +112,7 @@ void Labyrinth::save(const std::string &path) const
             }
             }
         }
+        for(;grassRunLength > 0; --grassRunLength) saveFile<< " ";
         /* intentionally do not save white spaces that only fill up to the end */
         saveFile << std::endl;
     }
