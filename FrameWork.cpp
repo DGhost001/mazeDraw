@@ -174,6 +174,7 @@ void FrameWork::executeRunner( const std::string& executable)
                               "Runner Finished",
                               result.c_str());
 
+        runnerSteps_->setSteps(steps_);
 
 
     }catch(std::exception const &e)

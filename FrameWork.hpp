@@ -53,7 +53,7 @@ private:
     RepeatDelay rightDelay_;
     RepeatDelay stepFunction_;
 
-    MazeRunner::RunnerStepList steps_;
+    RunnerSteps::StepList steps_;
 
     void drawLabyrinth( void ) const;
     void handleKeyboard( void );

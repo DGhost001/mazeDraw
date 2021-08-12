@@ -1,6 +1,8 @@
 #ifndef MAZERUNNER_HPP
 #define MAZERUNNER_HPP
 
+#include "RunnerSteps.hpp"
+
 #include <memory>
 #include <vector>
 #include <chrono>
@@ -19,27 +21,17 @@ class MazeRunner
 {
 public:
 
-    struct RunnerStep {
-        std::chrono::milliseconds timeStamp; /* When the maze runner reached this point */
-        size_t x;                             /* The x coordinate in the maze */
-        size_t y;                             /* The y coordinate in the maze */
-        int points;
-    };
-
-    typedef std::vector<RunnerStep> RunnerStepList;
-
-
     explicit MazeRunner(const std::string &executable, std::shared_ptr<Labyrinth> labyrinth);
     virtual ~MazeRunner( void );
 
 
-    RunnerStepList run();
+    RunnerSteps::StepList run();
 
     unsigned getPoints( void ) const { return points_;} /* Get the number of points */
     bool wasSuccessful( void ) const { return !failed_; } /* Runner was successfull */
     bool runerFailed( void ) const { return failed_; }
 
-    RunnerStep getStep(size_t const step) const { return steps_[step]; }
+    RunnerSteps::Steps getStep(size_t const step) const { return steps_[step]; }
     size_t getNumberOfSteps( void ) const {return steps_.size(); }
 
 private:
@@ -58,7 +50,7 @@ private:
     std::shared_ptr<subprocess::Popen> process_;
     std::shared_ptr<Labyrinth> lab_;
 
-    RunnerStepList steps_;
+    RunnerSteps::StepList steps_;
 
     std::array<char, 1024> buffer_;
     ssize_t bytesInBuffer_;

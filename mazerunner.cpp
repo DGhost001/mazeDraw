@@ -52,7 +52,7 @@ MazeRunner::~MazeRunner( void )
 }
 
 
-MazeRunner::RunnerStepList MazeRunner::run()
+RunnerSteps::StepList MazeRunner::run()
 {
     auto start = std::chrono::steady_clock::now();
     /* Create the process and make it running */
@@ -62,7 +62,7 @@ MazeRunner::RunnerStepList MazeRunner::run()
                 .popen());
 
 
-    RunnerStep const initial = {
+    RunnerSteps::Steps const initial = {
         .timeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start),
         .x = cx_,
         .y = cy_,
@@ -75,7 +75,7 @@ MazeRunner::RunnerStepList MazeRunner::run()
         std::string line = readLine();
         parseNextStep(line);
 
-        RunnerStep const step = {
+        RunnerSteps::Steps const step = {
             .timeStamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start),
             .x = cx_,
             .y = cy_,
