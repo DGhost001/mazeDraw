@@ -206,6 +206,7 @@ void FrameWork::run( void )
 
 
     do {
+        SDL_Delay(10);
         /* Clear the viewing area */
         SDL_SetRenderDrawColor(renderer_.get(), 0,0,0,255);
         SDL_RenderClear(renderer_.get());
