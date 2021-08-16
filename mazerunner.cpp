@@ -168,7 +168,7 @@ std::string MazeRunner::readLine()
             result.append(buffer_.cbegin()+bufferReadPointer_, buffer_.cbegin()+i+1);
             bufferReadPointer_ = i+1;
         }
-#if 0
+#if 1
         if(std::chrono::steady_clock::now() - lastRead_ > std::chrono::seconds(15)) {
             failed_ = true;
             finished_ = false;
